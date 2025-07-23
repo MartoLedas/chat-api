@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'nu.studer.jooq' version '8.2'
 }
 
 group = 'com.marto'
@@ -27,8 +28,19 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jooq'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+
     compileOnly 'org.projectlombok:lombok'
+
     runtimeOnly 'com.h2database:h2'
+
+    implementation 'org.apache.commons:commons-lang3:3.18.0'
+
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -37,4 +49,38 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jooq {
+    version = '3.20.5'
+    configurations {
+        main {
+            generationTool {
+                logging = 'WARN'
+                jdbc {
+                    driver = 'org.h2.Driver'
+                    url = 'jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1'
+                    user = 'sa'
+                    password = ''
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.h2.H2Database'
+                        inputSchema = 'PUBLIC'
+                    }
+                    generate {
+                        deprecated = false
+                        records = true
+                        immutablePojos = true
+                        fluentSetters = true
+                    }
+                    target {
+                        packageName = 'com.marto.chatapi.jooq.generated'
+                        directory = 'src/main/java'
+                    }
+                }
+            }
+        }
+    }
 }
