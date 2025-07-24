@@ -1,11 +1,11 @@
-CREATE TABLE users (
+CREATE TABLE if not exists users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role VARCHAR(20) NOT NULL DEFAULT 'USER'
 );
 
-CREATE TABLE messages (
+CREATE TABLE if not exists messages (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT,
     content TEXT NOT NULL,
