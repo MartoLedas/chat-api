@@ -32,40 +32,36 @@ public class UserController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
-        try {
-            UserResponse response = userService.createUser(request);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+        UserResponse response = userService.createUser(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{username}")
+    @DeleteMapping("/{userId}")
     @Operation(summary = "Delete a user", description = "Admin can delete a user and their messages become anonymous")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "User deleted successfully"),
             @ApiResponse(responseCode = "404", description = "User not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<Void> deleteUser(@PathVariable String username) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         try {
-            userService.deleteUser(username);
+            userService.deleteUser(userId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("/{username}/statistics")
+    @GetMapping("/{userId}/statistics")
     @Operation(summary = "Get user statistics", description = "Admin can get detailed statistics for a specific user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Statistics retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "User not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<UserStatisticsResponse> getUserStatistics(@PathVariable String username) {
+    public ResponseEntity<UserStatisticsResponse> getUserStatistics(@PathVariable Long userId) {
         try {
-            UserStatisticsResponse response = userService.getUserStatistics(username);
+            UserStatisticsResponse response = userService.getUserStatistics(userId);
             return ResponseEntity.ok(response);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

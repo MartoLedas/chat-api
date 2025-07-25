@@ -12,7 +12,3 @@ CREATE TABLE if not exists messages (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
 );
-
-CREATE INDEX idx_messages_created_at ON messages(created_at DESC);
-CREATE INDEX idx_messages_user_id ON messages(user_id);
-CREATE INDEX idx_users_username ON users(username);

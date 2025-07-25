@@ -1,6 +1,7 @@
 package com.marto.chatapi.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,6 @@ public class CreateMessageRequest {
     @Size(max = 1000, message = "Message content cannot exceed 1000 characters")
     private String content;
 
-    @NotBlank(message = "Username is required")
-    private String username;
+    @NotNull(message = "User id is required")
+    private Long userId;
 }

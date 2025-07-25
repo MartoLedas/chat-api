@@ -36,7 +36,4 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Query(value = "SELECT content FROM messages WHERE user_id = :userId ORDER BY created_at DESC LIMIT 1", nativeQuery = true)
     String findLastMessageContentByUserId(@Param("userId") Long userId);
-
-    @Query(value = "SELECT m.*, u.username FROM messages m LEFT JOIN users u ON m.user_id = u.id ORDER BY m.created_at DESC", nativeQuery = true)
-    List<Object[]> findMessagesWithUsernames();
 }

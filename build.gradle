@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'groovy'
     id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -24,13 +25,13 @@ repositories {
 }
 
 dependencies {
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     runtimeOnly 'com.h2database:h2'
 
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
 //    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
 //    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
 //    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
@@ -42,12 +43,34 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.18.0'
 
     annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
+    testImplementation 'org.spockframework:spock-spring:2.3-groovy-4.0'
+    testImplementation 'org.apache.groovy:groovy:4.0.15'
+}
+
+//tasks.named('test') {
+//    useJUnitPlatform()
+//}
+
+sourceSets {
+    test {
+        groovy {
+            srcDirs = ['src/test/groovy']
+        }
+    }
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+
+    // Include Spock tests
+    include '**/*Spec.class'
+    include '**/*Test.class'
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
 }

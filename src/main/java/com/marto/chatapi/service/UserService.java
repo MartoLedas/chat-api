@@ -47,10 +47,10 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(String username) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
+    public void deleteUser(Long userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isEmpty()) {
-            throw new IllegalArgumentException("User with username '" + username + "' not found");
+            throw new IllegalArgumentException("User with id '" + userId + "' not found");
         }
 
         User user = userOpt.get();
@@ -61,14 +61,13 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public UserStatisticsResponse getUserStatistics(String username) {
-        Optional<User> userOpt = userRepository.findByUsername(username);
+    public UserStatisticsResponse getUserStatistics(Long userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isEmpty()) {
-            throw new IllegalArgumentException("User with username '" + username + "' not found");
+            throw new IllegalArgumentException("User with id '" + userId + "' not found");
         }
 
         User user = userOpt.get();
-        Long userId = user.getId();
 
         long messageCount = messageRepository.countByUserId(userId);
         LocalDateTime firstMessageTime = messageRepository.findFirstMessageTimeByUserId(userId);
@@ -77,7 +76,7 @@ public class UserService {
         String lastMessageContent = messageRepository.findLastMessageContentByUserId(userId);
 
         return new UserStatisticsResponse(
-                username,
+                user.getUsername(),
                 messageCount,
                 firstMessageTime,
                 lastMessageTime,
